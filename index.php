@@ -9,10 +9,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="Build/UnityLoader.js"></script>
     <script src="js/main.js?<?php echo filemtime('js/main.js'); ?>"></script>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css?<?php echo filemtime('css/main.css'); ?>">
   </head>
   <body class="no-select">
-    <script src="js/facebook.js"></script>
+    <script src="js/facebook.js?<?php echo filemtime('js/facebook.js'); ?>"></script>
     <h1 id="fb-welcome"></h1>
     <div class="grid">
       <div class="title"><span class="title-span" lang="en-gb">Welcome to Chestnut Online</span></div>				
