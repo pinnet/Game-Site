@@ -9,7 +9,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
     <script src="Build/UnityLoader.js"></script>
-    <script src="js/IndexDB.js<?php echo filemtime('js/IndexDB.js'); ?>" type="text/javascript"></script>
+    <script src="js/JsStore-1.1.10.js" ></script>
+    <script src="js/setupDB.js?<?php echo filemtime('js/setupDB.js'); ?>" type="text/javascript"></script>
     <script src="js/main.js?<?php echo filemtime('js/main.js'); ?>"></script>
     <link rel="stylesheet" href="css/main.css?<?php echo filemtime('css/main.css'); ?>">
   </head>
