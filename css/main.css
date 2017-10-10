@@ -91,6 +91,8 @@ textarea {
    ========================================================================== */
   
   
+  #resizable { width: 610px; height: 314px; padding: 0.5em; }
+  
 .grid
 { 
       
@@ -206,10 +208,9 @@ textarea {
 }
 .content-span {
     position: relative;
-    left: 5px;
+    left: 2px;
     top:5px;
-     width: 600px; 
-     height: 400px;
+    
     }
 
 .title-span {

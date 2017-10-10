@@ -1,4 +1,19 @@
-    
+   $( function() {
+    $( "#resizable" ).resizable({alsoResize: ".content-span"});
+    $( "#resizable" ).draggable();
+    $( ".content-span" ).mouseenter(function(){
+    $( "#resizable" ).draggable('disable');
+});
+    $( ".content-span" ).mouseleave(function(){
+    $( "#resizable" ).draggable('enable');
+});
+   
+  
+  
+ } );
+  
+  
+  
    $(function(){
         var ticks = 0;
         $('#cover').show();
@@ -19,7 +34,7 @@
     
     
     var gameInstance = UnityLoader.instantiate("gameContainer", "Build/unityout.json");
-    var maxRndTime = 45000;
+    var maxRndTime = 120000;
     var minRndTime = 1000;
     var client;
     var port=443;
@@ -34,6 +49,7 @@
     
     function UnityReady(){
         
+            
        clearInterval(clock);
         
        $('#cover').hide();
@@ -43,8 +59,15 @@
        client.onMessageArrived = onMessageArrived;
        client.connect(options);  
         
-        
+       window.addEventListener('PlayerAdded', PlayerAdded);
     };
+    
+    function PlayerAdded(){
+        
+       gameInstance.SendMessage('Connection', 'onAdded'); 
+        
+    }
+    
     
     function onConnectionLost(){
         
@@ -84,7 +107,7 @@
      function onMessageArrived(message) {
             
             var msg = message.payloadString;
-            
+            var event = new CustomEvent('PlayerAdded');
             console.log(msg);
             
             if (msg.includes("REG:") != -1)
@@ -101,6 +124,21 @@
                                             },
                                 
                             OnSuccess:function (results){
+                                
+                            dbcon.update({
+                            In: "Player",
+                            Set: { LastSeen: new Date().getTime() },
+                            Where:{ PlayerID: reg[1] },              
+                                OnSuccess:function (rowsAffected)
+                                            { if (rowsAffected > 0) { 
+                                                console.log('Successfully Updated');
+                                                window.dispatchEvent(event);
+                                              }
+                                            },
+                                            OnError:function (error) 
+                                            { //alert(error.value);}
+                                                                    }
+                                            });                             
                             var Value={
                                         PlayerID: reg[1],
                                         LastSeen: new Date().getTime(),
@@ -114,7 +152,10 @@
                                             Into: "Player",
                                             Values:[Value],
                                             OnSuccess:function (rowsAffected)
-                                            { if (rowsAffected > 0) { console.log('Successfully Added');}
+                                            { if (rowsAffected > 0) { 
+                                                console.log('Successfully Added');
+                                                window.dispatchEvent(event);
+                                              }
                                             },
                                             OnError:function (error) 
                                             { //alert(error.value);}
