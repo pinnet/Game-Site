@@ -13,11 +13,14 @@
           }
         }, 500);
         window.addEventListener('UNITYReady', UnityReady);
+        
     }
     );
     
     
     var gameInstance = UnityLoader.instantiate("gameContainer", "Build/unityout.json");
+    var maxRndTime = 45000;
+    var minRndTime = 1000;
     var client;
     var port=443;
     var host="iot.eclipse.org";
@@ -59,18 +62,19 @@
   
         client.subscribe(playerDest + playerId);
          
-        SendReg(client,playerId,playerName,"INIT",regDest);
+        SendReg(client,playerId,playerName,"INIT",0,regDest);
          
     };
     
-    function SendReg(client,PlayerID,Name,status,destination){
+    function SendReg(client,PlayerID,Name,status,rank,destination){
         
-        message = new Paho.MQTT.Message( "REG:" + PlayerID + ":" + Name + ":" + status);
+        message = new Paho.MQTT.Message( "REG:" + PlayerID + ":" + Name + ":" + status + ":" + rank);
         message.destinationName = destination;
         
         console.log(PlayerID);
         console.log(Name);
         console.log(status);
+        console.log(rank);
         console.log(destination);
         
         client.send(message);
@@ -86,13 +90,46 @@
             if (msg.includes("REG:") != -1)
             {               
                 var reg = msg.split(":");
+                if(reg[2]== "null") reg[2] = "Guest";
                 if (reg[1] == localStorage.getItem("ID"))  return;               // reject own message
-                if(reg[3] == "INIT"){
-           
-                   setTimeout(SendReg(client,localStorage.getItem("ID"),localStorage.getItem("Name"),"ACK",playerDest + reg[1]),Math.floor(Math.random() * 45000)+ 1000);
-                }
-            }
-    };
+                
+                var dbcon = new JsStore.Instance("ChestnutDB");
+                    dbcon.select({
+                            From: "Player",
+                            Where:{
+                            PlayerID: reg[1] 
+                                            },
+                                
+                            OnSuccess:function (results){
+                            var Value={
+                                        PlayerID: reg[1],
+                                        LastSeen: new Date().getTime(),
+                                        Status: "Invite",
+                                        Name:  reg[2],
+                                        Rank: parseInt(reg[4])};
+            
+            
+                            if(results.length == 0){            
+                                dbcon.insert ({
+                                            Into: "Player",
+                                            Values:[Value],
+                                            OnSuccess:function (rowsAffected)
+                                            { if (rowsAffected > 0) { console.log('Successfully Added');}
+                                            },
+                                            OnError:function (error) 
+                                            { //alert(error.value);}
+                                                                    }
+                                            });
+                                        }
+                                            
+                                if(reg[3] == "INIT"){
+                                        setTimeout(SendReg(   client,localStorage.getItem("ID"),localStorage.getItem("Name"),"ACK",0,
+                                                                playerDest + reg[1]),Math.floor(Math.random() * maxRndTime)+ minRndTime);
+                                }
+                           }
+    });
+    }
+ }
     
     
      
