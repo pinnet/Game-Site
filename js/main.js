@@ -1,18 +1,4 @@
-   $( function() {
-    $( "#resizable" ).resizable({alsoResize: ".content-span"});
-    $( "#resizable" ).draggable();
-    $( ".content-span" ).mouseenter(function(){
-    $( "#resizable" ).draggable('disable');
-});
-    $( ".content-span" ).mouseleave(function(){
-    $( "#resizable" ).draggable('enable');
-});
-   
-  
-  
- } );
-  
-  
+
   
    $(function(){
         var ticks = 0;
@@ -28,8 +14,10 @@
           }
         }, 500);
         window.addEventListener('UNITYReady', UnityReady);
-        
-    }
+        if (window.Worker) {
+           
+        }
+      }
     );
     
     

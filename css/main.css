@@ -91,7 +91,13 @@ textarea {
    ========================================================================== */
   
   
-  #resizable { width: 610px; height: 314px; padding: 0.5em; }
+  #resizable { width: 610px;  padding: 0.5em; }
+#gameContainer 
+{
+      width: 600px; 
+      height:400px;
+}
+  
   
 .grid
 { 
