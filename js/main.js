@@ -1,5 +1,4 @@
 
-  
    $(function(){
         var ticks = 0;
         $('#cover').show();
@@ -14,8 +13,8 @@
           }
         }, 500);
         window.addEventListener('UNITYReady', UnityReady);
-        if (window.Worker) {
-           
+        if (!window.Worker) {
+           alert("Version Not Supported;");
         }
       }
     );
