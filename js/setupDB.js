@@ -28,13 +28,19 @@ var Players = {
                 }
             ]
         };
+        
+ 
  var now = new Date().getTime();       
  var Value={
             PlayerID: localStorage.getItem("ID"),
             LastSeen: now,
             Status: "-",
             Name: localStorage.getItem("Name"),
-            Rank: 0};      
+            Rank: 0
+            };      
+ if (sessionStorage.getItem('uid') === null){
+     sessionStorage.setItem('uid',guid());
+ }
         
 JsStore.isDbExist(DbName,function(isExist){
     
@@ -88,3 +94,12 @@ JsStore.isDbExist(DbName,function(isExist){
 function(err){
     alert(err.Message);
 });
+function guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+            }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}   

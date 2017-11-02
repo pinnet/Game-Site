@@ -14,34 +14,36 @@
         }, 500);
         window.addEventListener('UNITYReady', UnityReady);
         if (!window.Worker) {
-           alert("Version Not Supported;");
+           alert("Worker Version Not Supported;");
         }
       }
     );
     
     
     var gameInstance = UnityLoader.instantiate("gameContainer", "Build/unityout.json");
-    var maxRndTime = 120000;
+    var maxRndTime = 500000;
     var minRndTime = 1000;
     var client;
     var port=443;
-    var host="iot.eclipse.org";
+    var host="broker.ue3.eu";
     var options = {
+        userName:'chestnut',
+        password:'9C48FFB7FC319555C141DE44F726E40341',
         useSSL: true,
         onSuccess: onConnect,
         onFailure: onConnectionLost
     };
     var regDest = "/Chestnut/Registration/";
     var playerDest = "/Chestnut/Players/";   
-    
+    var sessionID = sessionStorage.getItem('uid');
+    console.log(sessionID);
     function UnityReady(){
         
-            
        clearInterval(clock);
         
        $('#cover').hide();
           
-       client = new Paho.MQTT.Client(host,port, localStorage.getItem("ID"));
+       client = new Paho.MQTT.Client(host,port,sessionID);
        client.onConnectionLost = onConnectionLost;
        client.onMessageArrived = onMessageArrived;
        client.connect(options);  
